@@ -1,0 +1,10 @@
+// database -> done
+
+// prepare models
+
+// register
+-> check request body
+-> validate the request data
+-> check email existing in database
+-> password encyription
+-> insert request into database
