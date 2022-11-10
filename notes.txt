@@ -1,6 +1,6 @@
 // database -> done
 
-// prepare models
+// prepare models -> done
 
 // register
 -> check request body
