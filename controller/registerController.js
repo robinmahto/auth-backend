@@ -1,26 +1,36 @@
 import authUserModel from "../model/authUser";
 
 const registerController = async(req, res) => {
-
-    if(Object.keys(req.body).length === 0){
-       return res.status(204).json({message:"request body is empty"})
-    }
-
-    const {firstname, lastname, email, password} = req.body;
-    if(!(firstname && lastname && email && password)){
-        return res.status(403).json({"message":"All Feilds are required"})
-    }
     
-    console.log("users: ", req.body)
-    // const userExists = await authUserModel.find({email})
-    // console.log ("userExists: ",userExists)
-    // if(userExists){
-    //    return res.send("email already exists")
-    // }
+    try {
+        // checking empty body
+        if(Object.keys(req.body).length === 0){
+            throw new Error("request body empty")
+         }
+         // de-structure feilds inside the req
+         const {firstname, lastname, email, password} = req.body;
+         
+         // checking empty feilds
+         if(!(firstname && lastname && email && password)){
+            throw new Error("All Feilds are  required")
+         }
+         // checking email exists in db
+         const userExists = await authUserModel.findOne({email})
+         if(userExists){
+            throw new Error("Email Already Exists")
+         }
+         
+         // dump data into the database
+         const dump = await authUserModel.create({firstname, lastname, email, password})
+         dump.save();
 
-    const dump = await authUserModel.create({firstname, lastname, email, password})
-    dump.save();
-    res.status(201).json({success: true, message: dump})
+         // send response to user
+         res.status(201).json({success: true, message:"user registered successfully"})
+        
+    } catch (error) {
+        res.json({success: false, message: error.message})
+    }
+ 
 }
 
 export default registerController;
