@@ -3,7 +3,6 @@ import {registerController} from "../controller";
 const router = express.Router();
 
 
-
 router.post("/register", registerController);
 
 

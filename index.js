@@ -1,8 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
-dotenv.config();
 import { connect_database } from "./config";
 import { router } from "./route";
+dotenv.config();
+const port = process.env.PORT || 7000
 
 // database connection
 connect_database()
@@ -18,4 +19,4 @@ app.get('/', (req, res)=>{
 
 app.use("/api", router)
 
-app.listen(4000, ()=>console.log(`port running on ${4000}`))
+app.listen(port, ()=>console.log(`port running on ${port}`))
