@@ -1,2 +1,2 @@
-# ecommerce-backend
+# auth-backend
  ## Rest APIs
