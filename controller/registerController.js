@@ -1,6 +1,6 @@
 import authUserModel from "../model/authUser";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import { JwtService } from "../service";
 
 const registerController = async(req, res) => {
     
@@ -25,16 +25,16 @@ const registerController = async(req, res) => {
         // encrypt password
         let salt = bcrypt.genSaltSync(10);
         let hash = bcrypt.hashSync(password, salt);
-         console.log("hash: ", hash)
+
          // dump data into the database
-         const dump = await authUserModel.create({firstname, lastname, email, password : hash})
-         dump.save();
+         const user = await authUserModel.create({firstname, lastname, email, password : hash})
+         const result = await user.save();
 
         // Generate JWT Token
-        
-
+        let token = JwtService.sign({_id : result._id, email: result.email })
+       
          // send response to user
-         res.status(201).json({success: true, message:"user registered successfully"})
+         res.status(201).json({success: true, message:"user registered successfully", token})
         
     } catch (error) {
         res.json({success: false, message: error.message})
