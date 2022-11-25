@@ -11,12 +11,10 @@ const app = express();
 
 //middleware
 app.use(express.json())
+app.use(express.urlencoded({extended: true}))
 
 // Routes
-app.get('/', (req, res)=>{
-    res.send("welcome to express")
-})
-
 app.use("/api", router)
 
+// port
 app.listen(port, ()=>console.log(`port running on ${port}`))
