@@ -1,6 +1,7 @@
 import { authUserModel } from "../model";
+import bcrypt from "bcryptjs";
 
-const loginController = (req, res)=>{
+const loginController = async(req, res)=>{
    try {
 
      // checking empty body
@@ -14,6 +15,19 @@ const loginController = (req, res)=>{
      if(!(email && password)){
         throw new Error("All Feilds are required")
      }
+
+     const user = await authUserModel.findOne({email:email})
+    
+     // user exists or not
+     if(!user){
+      throw new Error("Wrong Credentials");
+     }
+
+   // compare password
+   const match = await bcrypt.compare(user.password, password)
+   if(!match){
+      throw new Error("password does not match")
+   }
 
     //  send response
     res.json({success: true, message : "login successfully"})
